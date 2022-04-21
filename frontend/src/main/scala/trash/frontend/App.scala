@@ -12,7 +12,7 @@ import scala.scalajs.js.Object.create
 object App {
   private val css = Css.App
 
-  val App: FunctionalComponent[String] = FunctionalComponent[String] { props =>
+  val App: FunctionalComponent[Unit] = FunctionalComponent[Unit] { props =>
     val (chatID, setChatID) = useState(0)
 
     def kostil(aboba: js.Dynamic): Unit = {

@@ -1,7 +1,6 @@
 package trash.frontend
 import scalajs.js
 import org.scalajs.dom
-import scala.language.implicitConversions
 
 @js.native
 @js.annotation.JSImport("console.amogus", js.annotation.JSImport.Namespace)
