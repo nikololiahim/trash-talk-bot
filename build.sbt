@@ -141,6 +141,7 @@ lazy val bot = project
 lazy val frontend = project
   .in(file("frontend"))
   .enablePlugins(ScalaJSPlugin)
+  .settings(Compiler.settings)
   .settings(
     scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= {
@@ -151,7 +152,7 @@ lazy val frontend = project
       new SeleniumJSEnv(
         new ChromeOptions().setHeadless(true),
         seleniumConfig(
-          port = 3000,
+          port = 80,
           baseDir = baseDirectory.value,
           testJsDir = (Test / fastLinkJS / scalaJSLinkerOutputDirectory).value,
         ),

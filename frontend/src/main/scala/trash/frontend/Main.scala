@@ -29,6 +29,6 @@ object Main {
     }
 
     dom.console.amogus("@gosha2st", 0, true)
-    ReactDOM.render(App(), container)
+    ReactDOM.render(App("sas"), container)
   }
 }

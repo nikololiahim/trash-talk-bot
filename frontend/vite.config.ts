@@ -6,6 +6,7 @@ export default defineConfig(({command, mode}): UserConfig => {
             target: "esnext"
         },
         server: {
+            port: 80,
             watch: {
                 usePolling: true,
             }

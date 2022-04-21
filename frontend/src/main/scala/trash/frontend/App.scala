@@ -1,23 +1,28 @@
 package trash.frontend
 
-import slinky.web.html._
+import org.scalajs.dom
+import slinky.core.FunctionalComponent
 import slinky.core.facade.Hooks._
-import slinky.core.{FunctionalComponent, SyntheticEvent}
-import trash.frontend.ChatFind.ChatFindProps
-import trash.frontend.MessageList.MessageListProps
+import slinky.web.html._
+import org.scalajs.dom.console
+
+import scala.scalajs.js
+import scala.scalajs.js.Object.create
 
 object App {
   private val css = Css.App
 
-  val App: FunctionalComponent[Unit] = FunctionalComponent[Unit] { props =>
+  val App: FunctionalComponent[String] = FunctionalComponent[String] { props =>
     val (chatID, setChatID) = useState(0)
+
+    def kostil(aboba: js.Dynamic): Unit = {
+      console.log(aboba)
+    }
+
     div(
-      className := "App",
-      div(
-        className := "center",
-        ChatFind.ChatFind(ChatFindProps(setChatID)),
-        MessageList.MessageList(MessageListProps(chatID)),
-      ),
+      div(span("Yes")),
+      div(TelegramLoginButton(botName="debil_inno_bot", dataOnauth = kostil)),
+      div("Of course")
     )
   }
 }
