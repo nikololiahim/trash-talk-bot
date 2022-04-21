@@ -12,7 +12,7 @@ trait ConsoleAmogus extends js.Object {
   def amogus(
     imposter: String,
     numOfImposters: Int,
-    isImposter: js.UndefOr[Boolean],
+    isImposter: Boolean,
   ): Unit = js.native
 }
 

@@ -14,6 +14,7 @@ object Compiler {
     "-unchecked", // Enable additional warnings where generated code depends on assumptions.
     "-Xfatal-warnings", // Fail the compilation if there are any warnings.
     "-Ymacro-annotations", // To support the @react macro
+    "-language:implicitConversions" // Enable implicit conversions
   )
 
   val settings = Seq(
