@@ -12,7 +12,7 @@ object Compiler {
     /* Emit warning and location for usages of features that should be imported
      * explicitly. */
     "-unchecked", // Enable additional warnings where generated code depends on assumptions.
-    "-Xfatal-warnings", // Fail the compilation if there are any warnings.
+    "-Xwarn-unused", // Fail the compilation if there are any warnings.
     "-Ymacro-annotations", // To support the @react macro
     "-language:implicitConversions" // Enable implicit conversions
   )

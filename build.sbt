@@ -165,3 +165,13 @@ lazy val frontend = project
       "org.scalameta" %%% "munit"       % "1.0.0-M2",
     ),
   )
+
+lazy val markov = project
+  .in(file("markov"))
+  .settings(Compiler.settings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core"   % "2.7.0",
+      "org.typelevel" %% "cats-effect" % "3.3.11",
+    )
+  )
