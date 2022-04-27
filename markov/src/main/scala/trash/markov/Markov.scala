@@ -1,10 +1,30 @@
 package trash.markov
-import cats.{Eq, Hash, Show}
-import cats.syntax.show._
-import cats.syntax.foldable._
+import cats.Show
+import cats.effect.IO
 import cats.effect.std.Random
+import cats.syntax.foldable._
+import cats.syntax.show._
+import cats.effect.IOApp
+import cats.effect.ExitCode
 
-object Markov extends App {
+object Markov extends IOApp {
+
+  override def run(args: List[String]): IO[ExitCode] = {
+
+    val words = Seq(
+      Seq("I", "have", "has", "cats"),
+      Seq("John", "has", "apples"),
+      Seq("Garfield", "likes", "lasagna"),
+    )
+    val chain = words.foldLeft(Chain.empty[String])(_.addAll(_))
+
+    for {
+      _         <- IO.println(chain.show)
+      generated <- chain.generate(Random.scalaUtilRandom[IO])(maxSize = 10)
+      _         <- IO.println(generated)
+    } yield ExitCode.Success
+  }
+
   type Weight = Int
 
   final case class Chain[T](
@@ -31,7 +51,48 @@ object Markov extends App {
 
     def addAll(s: Seq[T]): Chain[T] = s.foldLeft(this)(_.add(_))
 
-    def generate[F[_]](implicit rng: Random[F]): F[Option[Seq[T]]] = ???
+    def generate(
+      rng: IO[Random[IO]]
+    )(maxSize: Int, maxAttempts: Int = 10): IO[Seq[T]] = {
+
+      def walk(start: T, acc: Seq[T]): IO[Seq[T]] =
+        this.graph.get(start) match {
+          case None => IO.pure(acc)
+          case Some(nextStates) =>
+            WeightedSelection.select(rng)(nextStates.toList).flatMap {
+              case None => IO.pure(acc)
+              case Some(nextState) =>
+                if (acc.length < maxSize)
+                  walk(nextState, acc :+ nextState)
+                else
+                  IO.pure(acc)
+            }
+        }
+
+      def recurse(attempt: Int, lastAttempt: Seq[T]): IO[Seq[T]] = {
+        val keys = this.graph.keySet.toVector
+        if (keys.isEmpty) {
+          IO.pure(Vector())
+        } else if (attempt == maxAttempts) {
+          IO.pure(lastAttempt)
+        } else {
+          val startRandom =
+            rng.flatMap(rng => rng.betweenInt(0, graph.size).map(keys(_)))
+          for {
+            start          <- startRandom
+            initialAttempt <- walk(start, Vector())
+            nextAttempt <-
+              if (initialAttempt.length == maxSize) {
+                IO.pure(initialAttempt)
+              } else {
+                recurse(attempt + 1, initialAttempt)
+              }
+          } yield nextAttempt
+        }
+      }
+
+      recurse(1, lastAttempt = Vector())
+    }
 
   }
 
@@ -51,14 +112,5 @@ object Markov extends App {
       }
     }
   }
-
-  val words = Seq(
-    Seq("I", "have", "has", "cats"),
-    Seq("I", "have", "apples"),
-    Seq("I", "like", "music"),
-  )
-  val chain = words.foldLeft(Chain.empty[String])(_.addAll(_))
-
-  println(chain.show)
 
 }
