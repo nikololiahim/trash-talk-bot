@@ -1,4 +1,4 @@
-package trash.persistence.model
+package trash.core.models
 
 import com.bot4s.telegram.models.Message
 

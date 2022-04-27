@@ -1,9 +1,9 @@
-package trash.persistence.repository.postgres
+package trash.core.repository.postgres
 
 import doobie._
 import doobie.implicits._
 import cats.syntax.all._
-import trash.persistence.model.MsgType
+import trash.core.models.MsgType
 
 object Schema {
 

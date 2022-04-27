@@ -1,7 +1,7 @@
-package trash.persistence.repository
+package trash.core.repository
 
 import com.bot4s.telegram.models.Message
-import trash.persistence.model.DBMessage
+import trash.core.models.DBMessage
 
 trait TelegramMessageRepository[F[_]] {
   def getChatMessages(chatId: Long): F[List[DBMessage]]

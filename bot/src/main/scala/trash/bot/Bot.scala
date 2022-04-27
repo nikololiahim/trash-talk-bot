@@ -8,8 +8,8 @@ import com.bot4s.telegram.methods._
 import com.bot4s.telegram.models._
 import doobie.implicits._
 import sttp.client3.SttpBackend
-import trash.persistence.model.MsgType
-import trash.persistence.repository.TelegramMessageRepository
+import trash.core.models.MsgType
+import trash.core.repository.TelegramMessageRepository
 
 class Bot[F[_]: Async](
   token: String,
@@ -19,6 +19,8 @@ class Bot[F[_]: Async](
 ) extends TelegramBot[F](token, backend, telegramApi)
   with Polling[F]
   with Commands[F] {
+
+  val botUser: F[User] = request(GetMe)
 
   def generateMessage(chatId: Long): F[Unit] =
     repo
@@ -41,9 +43,44 @@ class Bot[F[_]: Async](
       }
 
   override def receiveMessage(msg: Message): F[Unit] =
-    for {
-      _ <- Async[F].delay(logger.info(msg.toString))
-      _ <- repo.insertMessage(msg)
-      _ <- generateMessage(msg.chat.id)
-    } yield ()
+    (msg.newChatMembers, msg.leftChatMember) match {
+      case (Some(_), None) =>
+            Async[F].delay(())
+//        botUser.flatMap { me =>
+//          if (addedUsers.contains(me)) {
+//            val req = SendMessage(msg.chat.chatId, f"Я ЩА ВСЁ ПРО ВАС УЗНАЮ")
+//            val debilReq = request(GetChatAdministrators(msg.chat.id)).flatMap {
+//              debils =>
+//                request(
+//                  SendMessage(msg.chat.chatId, f"Список пидарасов:\n$debils")
+//                )
+//            }
+//
+//
+//          } else {
+//            val req = SendMessage(msg.chat.chatId, f"ПРИВЕТ ДИБИЛАМ")
+//            request(req).void
+//          }
+//        }
+
+      case (None, Some(removedUser)) =>
+        botUser.flatMap { me =>
+          if (removedUser == me) {
+            logger.info("SAD")
+          } else {
+//            val req = SendMessage(msg.chat.chatId, f"ПОКА ДИБИЛУ $removedUser")
+//            request(req).void
+          }
+          Async[F].delay(())
+
+        }
+
+      case _ =>
+        for {
+          _ <- Async[F].delay(logger.info(msg.toString))
+          _ <- repo.insertMessage(msg)
+          _ <- generateMessage(msg.chat.id)
+        } yield ()
+    }
+
 }

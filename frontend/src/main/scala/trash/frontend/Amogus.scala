@@ -4,7 +4,7 @@ import org.scalajs.dom
 
 @js.native
 @js.annotation.JSImport("console.amogus", js.annotation.JSImport.Namespace)
-private object AmogusImport extends js.Object
+object AmogusImport extends js.Object
 
 @js.native
 trait ConsoleAmogus extends js.Object {

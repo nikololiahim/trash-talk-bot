@@ -1,8 +1,5 @@
-import trash.persistence.model.MsgType
-import trash.persistence.repository.postgres.PostgresTelegramMessageRepository.{
-  fromEnum,
-  toEnum,
-}
+import trash.core.models.MsgType
+import trash.core.repository.postgres.PostgresTelegramMessageRepository._
 
 class MsgTypeTests extends munit.FunSuite {
   val msgTypeTestCases: Map[MsgType, String] = Map(

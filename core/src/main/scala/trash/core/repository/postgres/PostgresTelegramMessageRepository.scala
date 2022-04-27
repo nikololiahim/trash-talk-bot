@@ -1,4 +1,4 @@
-package trash.persistence.repository.postgres
+package trash.core.repository.postgres
 
 import com.bot4s.telegram.models.Message
 import cats.effect.kernel.MonadCancelThrow
@@ -6,11 +6,11 @@ import doobie.util.transactor.Transactor
 import doobie._
 import doobie.implicits._
 import doobie.postgres.implicits._
-import PostgresTelegramMessageRepository._
 import cats.syntax.all._
 import cats._
-import trash.persistence.model.{DBMessage, MsgType}
-import trash.persistence.repository.TelegramMessageRepository
+import trash.core.models.{DBMessage, MsgType}
+import trash.core.repository.TelegramMessageRepository
+import PostgresTelegramMessageRepository._
 
 class PostgresTelegramMessageRepository[F[_]: MonadCancelThrow](
   xa: Transactor[F]

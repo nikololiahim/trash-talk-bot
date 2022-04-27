@@ -1,16 +1,18 @@
-package trash.frontend
+package trash
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 import scala.scalajs.LinkingInfo
-
 import slinky.core._
 import slinky.web.ReactDOM
 import slinky.hot
-import App._
+import trash.frontend.App._
 import org.scalajs.dom
+import trash.frontend.ConsoleAmogus._
+import trash.frontend.{AmogusImport, Css}
 
-import ConsoleAmogus._
 
+// TODO: import botName from settings
+// TODO: import telegram auth data
 object Main {
   Css.Index
   AmogusImport
@@ -28,7 +30,7 @@ object Main {
       elem
     }
 
-    dom.console.amogus("@gosha2st", 0, false)
-    ReactDOM.render(App(()), container)
+    dom.console.amogus("@gosha2st", 0, true)
+    ReactDOM.render(App("debil_inno_bot"), container)
   }
 }

@@ -1,39 +1,40 @@
 package trash.frontend
 
-import org.scalajs.dom.Event
-import org.scalajs.dom.html.Input
-import slinky.core.{FunctionalComponent, SyntheticEvent}
+import org.scalajs.dom.console
+import slinky.core.annotations.react
+import slinky.core.{FunctionalComponent, SyntheticEvent, TagElement}
 import slinky.core.facade.Hooks.useState
 import slinky.core.facade.SetStateHookCallback
 import slinky.web.html._
 
-object ChatFind {
-  case class ChatFindProps(setChatId: SetStateHookCallback[Int])
+import scala.util.{Failure, Success, Try}
 
-  val ChatFind: FunctionalComponent[ChatFindProps] =
-    FunctionalComponent[ChatFindProps] { props =>
+// TODO: make it actually work
+@react object ChatFind {
+  case class Props(setChatId: SetStateHookCallback[Int])
+
+  val component: FunctionalComponent[Props] =
+    FunctionalComponent[Props] { props =>
       val (inputVal, setInputVal)     = useState(0)
       val (errorState, setErrorState) = useState(false)
 
-      def handleChange(e: SyntheticEvent[Input, Event]): Unit =
-        try {
-          setInputVal(e.target.value.toInt)
-          setErrorState(false)
-        } catch {
-          case e: Exception => setErrorState(true)
-        }
+//      def handleChange(e: Input): Unit = Try(e.value.toInt) match {
+//        case Failure(_) => setErrorState(true)
+//        case Success(value) =>
+//          setInputVal(value)
+//          setErrorState(false)
+//      }
 
-      def handleClick(): Unit =
-        props.setChatId(inputVal)
+      def handleClick(): Unit = props.setChatId(inputVal)
 
-      div()(
+      div(
         div(
           className := "form__group field",
           input(
             className := (if (errorState) "form__field error_input"
                           else "form__field"),
+            onChange    := (event => console.log(event)),
             placeholder := "ChatID",
-            onChange    := (handleChange(_)),
             name        := "chatID",
             id          := "chatID",
             required,

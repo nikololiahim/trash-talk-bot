@@ -15,8 +15,9 @@ val Http4sVersion   = "0.23.10"
 val CirceVersion    = "0.14.1"
 val Log4CatsVersion = "2.2.0"
 val DoobieVersion   = "1.0.0-RC1"
+val Bot4sVersion    = "5.3.0"
 
-val slinkyVersion = "0.7.2"
+val slinkyVersion   = "0.7.2"
 
 def seleniumConfig(
   port: Int,
@@ -118,13 +119,27 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
   ),
 )
 
+lazy val core = project
+  .in(file("core"))
+  .settings(Compiler.settings)
+  .settings(
+    name := "Core",
+    libraryDependencies ++= Seq(
+      "com.bot4s"     %% "telegram-core"       % Bot4sVersion,
+      "org.tpolecat"  %% "doobie-core"         % DoobieVersion,
+      "org.tpolecat"  %% "doobie-postgres"     % DoobieVersion,
+      "org.tpolecat"  %% "doobie-hikari"       % DoobieVersion,
+    )
+  )
+
 lazy val bot = project
   .in(file("bot"))
+  .dependsOn(core)
   .settings(Compiler.settings)
   .settings(
     name := "Trash Talk Telegram Bot",
     libraryDependencies ++= Seq(
-      "com.bot4s"     %% "telegram-core"       % "5.3.0",
+      "com.bot4s"     %% "telegram-core"       % Bot4sVersion,
       "org.tpolecat"  %% "doobie-core"         % DoobieVersion,
       "org.tpolecat"  %% "doobie-postgres"     % DoobieVersion,
       "org.tpolecat"  %% "doobie-hikari"       % DoobieVersion,
@@ -140,6 +155,7 @@ lazy val bot = project
 
 lazy val frontend = project
   .in(file("frontend"))
+  .dependsOn(core)
   .enablePlugins(ScalaJSPlugin)
   .settings(Compiler.settings)
   .settings(
