@@ -134,7 +134,7 @@ lazy val bot = project
       "org.typelevel" %% "cats-effect"         % CatsVersion,
       "org.typelevel" %% "log4cats-slf4j"      % Log4CatsVersion,
       "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % "3.4.2",
-      "org.scalameta" %% "munit" % "1.0.0-M2" % Test,
+      "org.scalameta" %% "munit" % "1.0.0-M3" % Test,
     ),
   )
 
@@ -162,7 +162,7 @@ lazy val frontend = project
       "me.shadaj"     %%% "slinky-core" % slinkyVersion,
       "me.shadaj"     %%% "slinky-web"  % slinkyVersion,
       "me.shadaj"     %%% "slinky-hot"  % slinkyVersion,
-      "org.scalameta" %%% "munit"       % "1.0.0-M2",
+      "org.scalameta" %%% "munit"       % "1.0.0-M3",
     ),
   )
 
