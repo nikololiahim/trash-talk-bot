@@ -1,16 +1,20 @@
 package trash.frontend
 
 import org.scalajs.dom.console
+import org.scalajs.dom.html.Input
 import slinky.core.annotations.react
 import slinky.core.{FunctionalComponent, SyntheticEvent, TagElement}
 import slinky.core.facade.Hooks.useState
 import slinky.core.facade.SetStateHookCallback
 import slinky.web.html._
+import trash.frontend.ConsoleAmogus.console2amogus
 
 import scala.util.{Failure, Success, Try}
 
-// TODO: make it actually work
+
 @react object ChatFind {
+  Css.App
+
   case class Props(setChatId: SetStateHookCallback[Int])
 
   val component: FunctionalComponent[Props] =
@@ -18,12 +22,14 @@ import scala.util.{Failure, Success, Try}
       val (inputVal, setInputVal)     = useState(0)
       val (errorState, setErrorState) = useState(false)
 
-//      def handleChange(e: Input): Unit = Try(e.value.toInt) match {
-//        case Failure(_) => setErrorState(true)
-//        case Success(value) =>
-//          setInputVal(value)
-//          setErrorState(false)
-//      }
+      def handleChange(inp: Input): Unit =
+        inp.value.toIntOption match {
+          case None =>
+            setErrorState(true)
+          case Some(value) =>
+            setInputVal(value)
+            setErrorState(false)
+        }
 
       def handleClick(): Unit = props.setChatId(inputVal)
 
@@ -33,7 +39,9 @@ import scala.util.{Failure, Success, Try}
           input(
             className := (if (errorState) "form__field error_input"
                           else "form__field"),
-            onChange    := (event => console.log(event)),
+            onChange := (event =>
+              handleChange(event.target.asInstanceOf[Input])
+            ),
             placeholder := "ChatID",
             name        := "chatID",
             id          := "chatID",

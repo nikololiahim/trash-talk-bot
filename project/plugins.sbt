@@ -5,6 +5,7 @@ addSbtPlugin("com.sonar-scala"         % "sbt-sonar"          % "2.3.0")
 addSbtPlugin("com.sksamuel.scapegoat" %% "sbt-scapegoat"      % "1.1.1")
 addSbtPlugin("ch.epfl.scala"           % "sbt-scalafix"       % "0.9.34")
 addSbtPlugin("com.codecommit"          % "sbt-github-actions" % "0.14.2")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.2.0")
 
 libraryDependencies += "io.github.bonigarcia" % "webdrivermanager"     % "5.0.3"
 libraryDependencies += "org.scala-js"        %% "scalajs-env-selenium" % "1.1.1"

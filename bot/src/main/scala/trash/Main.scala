@@ -1,7 +1,6 @@
 package trash
 
 import cats.effect._
-import cats.syntax.all._
 import sttp.client3.asynchttpclient.cats.AsyncHttpClientCatsBackend
 import doobie.util.transactor.Transactor
 import trash.bot.Bot
@@ -12,13 +11,7 @@ object Main extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] =
     for {
-      token <- IO.fromOption(botToken)(
-        new Exception(
-          f"Telegram Bot API token is not set. " +
-            s"Please set the \"$botEnvVarName\" environment variable" +
-            " with your token value."
-        )
-      )
+      token <- botToken
       backend <- AsyncHttpClientCatsBackend[IO]()
       xa <- IO.delay(
         Transactor.fromDriverManager[IO](

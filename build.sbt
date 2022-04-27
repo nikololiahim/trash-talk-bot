@@ -10,12 +10,12 @@ ThisBuild / scalafixScalaBinaryVersion := "2.13"
 ThisBuild / licenses                   := Seq(License.MIT)
 scapegoatReports                       := Seq("xml")
 
-val CatsVersion     = "3.3.5"
-val Http4sVersion   = "0.23.10"
+val CatsVersion     = "3.3.11"
+val Http4sVersion   = "0.23.11"
 val CirceVersion    = "0.14.1"
 val Log4CatsVersion = "2.2.0"
 val DoobieVersion   = "1.0.0-RC1"
-val Bot4sVersion    = "5.3.0"
+val Bot4sVersion    = "5.4.1"
 
 val slinkyVersion   = "0.7.2"
 
@@ -119,12 +119,17 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
   ),
 )
 
-lazy val core = project
+lazy val core =  crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
   .in(file("core"))
   .settings(Compiler.settings)
   .settings(
     name := "Core",
     libraryDependencies ++= Seq(
+      "org.http4s"    %%% "http4s-ember-client" % Http4sVersion,
+      "org.http4s"    %%% "http4s-circe"        % Http4sVersion,
+      "org.http4s"    %%% "http4s-dsl"          % Http4sVersion,
+      "io.circe"      %%% "circe-generic"       % "0.14.1",
       "com.bot4s"     %% "telegram-core"       % Bot4sVersion,
       "org.tpolecat"  %% "doobie-core"         % DoobieVersion,
       "org.tpolecat"  %% "doobie-postgres"     % DoobieVersion,
@@ -132,7 +137,8 @@ lazy val core = project
     )
   )
 
-lazy val bot = project
+lazy val bot = crossProject(JVMPlatform)
+  .crossType(CrossType.Pure)
   .in(file("bot"))
   .dependsOn(core)
   .settings(Compiler.settings)
@@ -153,7 +159,8 @@ lazy val bot = project
     ),
   )
 
-lazy val frontend = project
+lazy val frontend = crossProject(JSPlatform)
+  .crossType(CrossType.Pure)
   .in(file("frontend"))
   .dependsOn(core)
   .enablePlugins(ScalaJSPlugin)
@@ -175,6 +182,7 @@ lazy val frontend = project
       )
     },
     libraryDependencies ++= Seq(
+      "org.typelevel" %%% "cats-effect"  % CatsVersion,
       "me.shadaj"     %%% "slinky-core" % slinkyVersion,
       "me.shadaj"     %%% "slinky-web"  % slinkyVersion,
       "me.shadaj"     %%% "slinky-hot"  % slinkyVersion,

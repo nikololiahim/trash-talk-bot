@@ -5,6 +5,7 @@ import slinky.core.FunctionalComponent
 import slinky.core.facade.Hooks._
 import slinky.web.html._
 import org.scalajs.dom.console
+import trash.core.models.TelegramAuthData
 import trash.frontend.MessageList.MessageListProps
 
 import scala.scalajs.js
