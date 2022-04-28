@@ -1,5 +1,5 @@
-import trash.core.models.MsgType
-import trash.core.repository.postgres.PostgresTelegramMessageRepository._
+import trash.repository.models.MsgType
+import trash.repository.models.Queries._
 
 class MsgTypeTests extends munit.FunSuite {
   val msgTypeTestCases: Map[MsgType, String] = Map(

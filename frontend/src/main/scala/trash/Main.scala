@@ -9,7 +9,7 @@ import trash.frontend.App._
 import org.scalajs.dom
 import trash.frontend.ConsoleAmogus._
 import trash.frontend.{AmogusImport, Css}
-
+import trash.BuildInfo
 
 // TODO: import botName from settings
 // TODO: import telegram auth data

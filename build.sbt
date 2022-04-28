@@ -1,14 +1,14 @@
 import org.scalajs.jsenv.selenium.SeleniumJSEnv
 import org.openqa.selenium.chrome.ChromeOptions
 
-ThisBuild / scalaVersion               := "2.13.8"
-ThisBuild / scapegoatVersion           := "1.4.12"
+ThisBuild / scalaVersion := "2.13.8"
+//ThisBuild / scapegoatVersion           := "1.4.12"
 ThisBuild / version                    := "0.1.0-SNAPSHOT"
 ThisBuild / semanticdbEnabled          := true
 ThisBuild / semanticdbVersion          := scalafixSemanticdb.revision
 ThisBuild / scalafixScalaBinaryVersion := "2.13"
 ThisBuild / licenses                   := Seq(License.MIT)
-scapegoatReports                       := Seq("xml")
+//scapegoatReports                       := Seq("xml")
 
 val CatsVersion     = "3.3.11"
 val Http4sVersion   = "0.23.11"
@@ -17,7 +17,7 @@ val Log4CatsVersion = "2.2.0"
 val DoobieVersion   = "1.0.0-RC1"
 val Bot4sVersion    = "5.4.1"
 
-val slinkyVersion   = "0.7.2"
+val slinkyVersion = "0.7.2"
 
 def seleniumConfig(
   port: Int,
@@ -119,28 +119,56 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
   ),
 )
 
-lazy val core =  crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
+  .enablePlugins(BuildInfoPlugin)
   .settings(Compiler.settings)
   .settings(
     name := "Core",
+    buildInfoKeys := Seq[BuildInfoKey](
+      name,
+      version,
+      scalaVersion,
+      sbtVersion,
+      "BACKEND_URL" -> sys.env.get("BACKEND_URL"),
+    ),
+    buildInfoPackage := "trash",
     libraryDependencies ++= Seq(
-      "org.http4s"    %%% "http4s-ember-client" % Http4sVersion,
-      "org.http4s"    %%% "http4s-circe"        % Http4sVersion,
-      "org.http4s"    %%% "http4s-dsl"          % Http4sVersion,
-      "io.circe"      %%% "circe-generic"       % "0.14.1",
+      "org.typelevel" %% "cats-effect" % CatsVersion
+    ),
+  )
+  .settings(
+    buildInfoKeys := Seq[BuildInfoKey](
+      "BACKEND_URL" -> sys.env.get("BACKEND_URL")
+    )
+  )
+
+lazy val backend = crossProject(JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("backend"))
+  .dependsOn(core)
+  .settings(Compiler.settings)
+  .settings(
+    name := "Trash Talk Backend",
+    libraryDependencies ++= Seq(
       "com.bot4s"     %% "telegram-core"       % Bot4sVersion,
       "org.tpolecat"  %% "doobie-core"         % DoobieVersion,
       "org.tpolecat"  %% "doobie-postgres"     % DoobieVersion,
       "org.tpolecat"  %% "doobie-hikari"       % DoobieVersion,
-    )
+      "org.http4s"    %% "http4s-dsl"          % Http4sVersion,
+      "org.http4s"    %% "http4s-blaze-server" % Http4sVersion,
+      "org.http4s"    %% "http4s-circe"        % Http4sVersion,
+      "org.typelevel" %% "cats-effect"         % CatsVersion,
+      "io.circe"      %% "circe-generic"       % "0.14.1",
+      "org.scalameta" %% "munit"               % "1.0.0-M2" % Test,
+    ),
   )
 
 lazy val bot = crossProject(JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("bot"))
-  .dependsOn(core)
+  .dependsOn(core, backend)
   .settings(Compiler.settings)
   .settings(
     name := "Trash Talk Telegram Bot",
@@ -182,7 +210,7 @@ lazy val frontend = crossProject(JSPlatform)
       )
     },
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-effect"  % CatsVersion,
+      "org.typelevel" %%% "cats-effect" % CatsVersion,
       "me.shadaj"     %%% "slinky-core" % slinkyVersion,
       "me.shadaj"     %%% "slinky-web"  % slinkyVersion,
       "me.shadaj"     %%% "slinky-hot"  % slinkyVersion,

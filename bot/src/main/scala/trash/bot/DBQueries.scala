@@ -1,4 +1,4 @@
-package trash.core.repository.postgres
+package trash.bot
 
 import com.bot4s.telegram.models.Message
 import cats.effect.kernel.MonadCancelThrow
@@ -8,19 +8,13 @@ import doobie.implicits._
 import doobie.postgres.implicits._
 import cats.syntax.all._
 import cats._
-import trash.core.models.{DBMessage, MsgType}
-import trash.core.repository.TelegramMessageRepository
-import PostgresTelegramMessageRepository._
+import trash.repository.models.{DBMessage, Queries}
+import trash.repository.models.Queries._
+import trash.repository.models.Queries
 
-class PostgresTelegramMessageRepository[F[_]: MonadCancelThrow](
+class DBQueries[F[_]: MonadCancelThrow](
   xa: Transactor[F]
-) extends TelegramMessageRepository[F] {
-
-  def getChatMessages(chatId: Long): F[List[DBMessage]] =
-    sql"""
-      SELECT chat_id, message_id, type, content FROM message
-      WHERE chat_id = $chatId
-       """.query[DBMessage].to[List].transact(xa)
+) extends Queries[F](xa) {
 
   def getRandomMessage(chatId: Long): F[List[DBMessage]] =
     sql"""
@@ -30,7 +24,7 @@ class PostgresTelegramMessageRepository[F[_]: MonadCancelThrow](
       LIMIT 1
        """.query[DBMessage].to[List].transact(xa)
 
-  def insertMessage(msg: Message): F[Unit] =
+  def saveMessage(msg: Message): F[Unit] =
     DBMessage
       .from(msg)
       .map { m =>
@@ -51,18 +45,4 @@ class PostgresTelegramMessageRepository[F[_]: MonadCancelThrow](
         Applicative[F].unit
       )
 
-}
-
-object PostgresTelegramMessageRepository {
-
-  def toEnum(t: MsgType): String           = t.toString
-  def fromEnum(s: String): Option[MsgType] = MsgType.mapping.get(s)
-
-  implicit val msgTypeMeta: Meta[MsgType] =
-    pgEnumStringOpt("msg_type", fromEnum, toEnum)
-
-  def apply[F[_]: MonadCancelThrow](
-    xa: Transactor[F]
-  ): PostgresTelegramMessageRepository[F] =
-    new PostgresTelegramMessageRepository(xa)
 }

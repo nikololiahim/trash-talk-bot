@@ -8,14 +8,13 @@ import com.bot4s.telegram.methods._
 import com.bot4s.telegram.models._
 import doobie.implicits._
 import sttp.client3.SttpBackend
-import trash.core.models.MsgType
-import trash.core.repository.TelegramMessageRepository
+import trash.repository.models.MsgType
 
 class Bot[F[_]: Async](
-  token: String,
-  backend: SttpBackend[F, Any],
-  repo: TelegramMessageRepository[F],
-  telegramApi: String = "api.telegram.org",
+                        token: String,
+                        backend: SttpBackend[F, Any],
+                        queries: DBQueries[F],
+                        telegramApi: String = "api.telegram.org",
 ) extends TelegramBot[F](token, backend, telegramApi)
   with Polling[F]
   with Commands[F] {
@@ -23,7 +22,7 @@ class Bot[F[_]: Async](
   val botUser: F[User] = request(GetMe)
 
   def generateMessage(chatId: Long): F[Unit] =
-    repo
+    queries
       .getRandomMessage(chatId)
       .flatMap { list =>
         list.headOption match {
@@ -78,7 +77,7 @@ class Bot[F[_]: Async](
       case _ =>
         for {
           _ <- Async[F].delay(logger.info(msg.toString))
-          _ <- repo.insertMessage(msg)
+          _ <- queries.saveMessage(msg)
           _ <- generateMessage(msg.chat.id)
         } yield ()
     }

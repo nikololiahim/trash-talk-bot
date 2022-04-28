@@ -1,4 +1,4 @@
-package trash.core.models
+package trash.repository.models
 
 import scala.collection.immutable.SortedMap
 
@@ -15,7 +15,7 @@ object MsgType {
 
   final case object DOC extends MsgType
 
-  private[core] val mapping = SortedMap(
+  private[repository] val mapping = SortedMap(
     "TEXT"    -> TEXT,
     "IMAGE"   -> IMAGE,
     "STICKER" -> STICKER,

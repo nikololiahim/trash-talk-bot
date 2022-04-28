@@ -1,15 +1,5 @@
 package trash.core
 import cats.effect.IO
-import io.circe.Json
-import org.http4s.ember.client._
-import org.http4s.client._
-import org.http4s.implicits.http4sLiteralsSyntax
-import org.http4s.circe._
-import io.circe.generic.semiauto._
-import io.circe.jawn
-import org.http4s.circe.CirceEntityDecoder._
-import org.http4s.client.dsl.io._
-import org.http4s.dsl.io.GET
 
 object Settings {
   val botEnvVarName = "TRASHTALK_TOKEN"
@@ -20,37 +10,45 @@ object Settings {
         " with your token value."
     )
   )
-  val botName: IO[String] = botToken.flatMap(Aux.getBotName)
+//  val botName: IO[String] = botToken.flatMap(Aux.getBotName)
 
   val dbName: String = sys.env.getOrElse("TRASHDB_NAME", "postgres")
-  val dbURL:  String =
+  val dbURL: String =
     sys.env.getOrElse("TRASHDB_URL", "jdbc:postgresql://localhost:5432")
   val dbUsername: String = sys.env.getOrElse("TRASHDB_UNAME", "postgres")
   val dbPassword: String = sys.env.getOrElse("TRASHDB_PASS", "changeme")
 
-  val backendURL: String = sys.env.getOrElse("TRASHBACK_URL", "TBD")
+  val backendURL: String = sys.env.getOrElse("TRASHBACK_URL", "localhost")
+  val backendPort: IO[Int] =
+    IO.fromOption(sys.env.getOrElse("TRASHBACK_PORT", "8080").toIntOption)(
+      new Exception(
+        f"Could not retrieve the proper port value. " +
+          s"The provided value could not be converted to int"
+      )
+    )
+
 }
 
-object Aux {
-  case class Content(
-    username: String
-  )
-  case class User(
-    ok: Boolean,
-    result: Content,
-  )
-
-  def getBotName(token: String): IO[String] = {
-    implicit val circeDecoder2  = deriveDecoder[Content]
-    implicit val circeDecoder  = deriveDecoder[User]
-    implicit val http4sDecoder = jsonOf[IO, User]
-
-    val req = GET(uri"https://api.telegram.org/bot5268670638:AAGi5kGUsJPpTeXOf2dWu04NVJETKkpJ4y4/getMe")
-
-    EmberClientBuilder.default[IO].build.use { client =>
-      client
-        .expect(req)(jsonOf[IO, User])
-        .map(_.result.username)
-    }
-  }
-}
+//object Aux {
+//  case class Content(
+//    username: String
+//  )
+//  case class User(
+//    ok: Boolean,
+//    result: Content,
+//  )
+//
+//  def getBotName(token: String): IO[String] = {
+//    implicit val circeDecoder2  = deriveDecoder[Content]
+//    implicit val circeDecoder  = deriveDecoder[User]
+//    implicit val http4sDecoder = jsonOf[IO, User]
+//
+//    val req = GET(uri"https://api.telegram.org/bot${token}/getMe")
+//
+//    EmberClientBuilder.default[IO].build.use { client =>
+//      client
+//        .expect(req)(jsonOf[IO, User])
+//        .map(_.result.username)
+//    }
+//  }
+//}
