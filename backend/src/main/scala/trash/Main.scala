@@ -16,7 +16,7 @@ object Main extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = for {
     code <- IO(ExitCode.Success)
     port <- backendPort
-    host =  backendURL
+    host = backendURL
     transactor <- IO.delay(
       Transactor.fromDriverManager[IO](
         driver = "org.postgresql.Driver",

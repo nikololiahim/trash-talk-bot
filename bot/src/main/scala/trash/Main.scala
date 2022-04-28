@@ -9,9 +9,9 @@ import core.Settings._
 
 object Main extends IOApp {
 
-  override def run(args: List[String]): IO[ExitCode] = {
+  override def run(args: List[String]): IO[ExitCode] =
     for {
-      token <- botToken
+      token   <- botToken
       backend <- AsyncHttpClientCatsBackend[IO]()
       xa <- IO.delay(
         Transactor.fromDriverManager[IO](
@@ -28,6 +28,5 @@ object Main extends IOApp {
       )
       _ <- botResource.use(_ => IO.never)
     } yield ExitCode.Success
-  }
 
 }

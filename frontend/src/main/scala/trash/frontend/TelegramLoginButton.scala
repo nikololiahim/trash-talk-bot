@@ -11,7 +11,6 @@ import scala.scalajs.js.annotation.JSImport
 @js.native
 private object TelegramLoginButtonImport extends js.Object
 
-
 @react object TelegramLoginButton extends ExternalComponent {
   case class Props(botName: String, dataOnauth: TelegramAuthData => Unit)
   override val component = TelegramLoginButtonImport

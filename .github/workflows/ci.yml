@@ -64,7 +64,7 @@ jobs:
       - run: |
           cd frontend && \
                    npm install && \
-                   { npx vite -l silent --clearScreen false --port 80 & } && \
+                   { npx vite -l silent --clearScreen false --port 3000 & } && \
                    cd ..  && \
                    sbt ++${{ matrix.scala }} test && \
                    kill $(jobs -p)

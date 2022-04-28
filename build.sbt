@@ -92,7 +92,7 @@ ThisBuild / githubWorkflowAddedJobs ++= Seq(
         // TODO: For now, coverage is collected only from 'bot' subproject.
         //       Figure out how to setup sbt-scoverage with scala-js (probably unreal)
         WorkflowStep.Sbt(
-          List("project bot", "coverage", "test", "coverageReport")
+          List("project botJVM", "coverage", "test", "coverageReport")
         ),
         WorkflowStep.Run(
           List(

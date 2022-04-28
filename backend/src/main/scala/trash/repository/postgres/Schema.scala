@@ -1,6 +1,6 @@
 package trash.utils.postgres
 
-import doobie.{Fragment, ConnectionIO}
+import doobie.{ConnectionIO, Fragment}
 import doobie.util.transactor.Transactor
 import cats.syntax.apply._
 import doobie.implicits._
