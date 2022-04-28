@@ -183,7 +183,7 @@ lazy val bot = crossProject(JVMPlatform)
       "org.typelevel" %% "cats-effect"         % CatsVersion,
       "org.typelevel" %% "log4cats-slf4j"      % Log4CatsVersion,
       "com.softwaremill.sttp.client3" %% "async-http-client-backend-cats" % "3.4.2",
-      "org.scalameta" %% "munit" % "1.0.0-M2" % Test,
+      "org.scalameta" %% "munit" % "1.0.0-M3" % Test,
     ),
   )
 
@@ -214,6 +214,16 @@ lazy val frontend = crossProject(JSPlatform)
       "me.shadaj"     %%% "slinky-core" % slinkyVersion,
       "me.shadaj"     %%% "slinky-web"  % slinkyVersion,
       "me.shadaj"     %%% "slinky-hot"  % slinkyVersion,
-      "org.scalameta" %%% "munit"       % "1.0.0-M2",
+      "org.scalameta" %%% "munit"       % "1.0.0-M3",
     ),
+  )
+
+lazy val markov = project
+  .in(file("markov"))
+  .settings(Compiler.settings)
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core"   % "2.7.0",
+      "org.typelevel" %% "cats-effect" % "3.3.11",
+    )
   )
