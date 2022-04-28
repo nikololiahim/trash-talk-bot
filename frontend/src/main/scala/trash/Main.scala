@@ -30,7 +30,7 @@ object Main {
       elem
     }
 
-    dom.console.amogus("@gosha2st", 0, true)
+    dom.console.amogus("ABOBA", 0, true)
     ReactDOM.render(App("debil_inno_bot"), container)
   }
 }

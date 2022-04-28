@@ -1,20 +1,19 @@
 package trash.repository
 
-import cats.effect._
-import cats.implicits._
+import cats.effect.MonadCancelThrow
+import cats.syntax.flatMap._
+import cats.syntax.functor._
 import doobie.util.transactor.Transactor
 import io.circe.generic.auto._
 import io.circe.syntax._
 import org.http4s._
-import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.circe._
 import org.http4s.dsl._
 import org.http4s.implicits._
 import org.http4s.server._
-import trash.core.Settings.{backendPort, backendURL, dbName, dbPassword, dbURL, dbUsername}
 import trash.utils.postgres.BackendQueries
 
-class Server[F[_]: Async](xa: Transactor[F]) {
+class Server[F[_]: MonadCancelThrow](xa: Transactor[F]) {
 
   def routes: HttpRoutes[F] = {
     val dsl = Http4sDsl[F]
@@ -23,7 +22,7 @@ class Server[F[_]: Async](xa: Transactor[F]) {
     HttpRoutes.of[F] {
       case GET -> Root / "ids" =>
         for {
-          messages <- sql.availableChatIds()
+          messages <- sql.availableChatIds
           response <- Ok(messages.asJson)
         } yield response
 

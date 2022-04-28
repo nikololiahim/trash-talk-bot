@@ -1,18 +1,14 @@
 package trash
 
 import cats.effect._
-import cats.implicits._
 import doobie.util.transactor.Transactor
-import io.circe.generic.auto._
-import io.circe.syntax._
-import org.http4s._
 import org.http4s.blaze.server.BlazeServerBuilder
-import org.http4s.circe._
-import org.http4s.dsl._
-import org.http4s.implicits._
-import org.http4s.server._
-import trash.core.Settings.{backendPort, backendURL, dbName, dbPassword, dbURL, dbUsername}
-import trash.utils.postgres.BackendQueries
+import trash.core.Settings.backendPort
+import trash.core.Settings.backendURL
+import trash.core.Settings.dbName
+import trash.core.Settings.dbPassword
+import trash.core.Settings.dbURL
+import trash.core.Settings.dbUsername
 import trash.repository.Server
 
 object Main extends IOApp {
@@ -20,7 +16,7 @@ object Main extends IOApp {
   override def run(args: List[String]): IO[ExitCode] = for {
     code <- IO(ExitCode.Success)
     port <- backendPort
-    host =  backendURL
+    host = backendURL
     transactor <- IO.delay(
       Transactor.fromDriverManager[IO](
         driver = "org.postgresql.Driver",

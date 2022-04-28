@@ -1,20 +1,15 @@
 package trash.bot
 
-import com.bot4s.telegram.models.Message
-import cats.effect.kernel.MonadCancelThrow
-import doobie.util.transactor.Transactor
-import doobie._
-import doobie.implicits._
-import doobie.postgres.implicits._
-import cats.syntax.all._
 import cats._
-import trash.repository.models.{DBMessage, Queries}
-import trash.repository.models.Queries._
-import trash.repository.models.Queries
+import cats.effect.kernel.MonadCancelThrow
+import cats.syntax.apply._
+import cats.syntax.functor._
+import com.bot4s.telegram.models.Message
+import doobie.implicits._
+import doobie.util.transactor.Transactor
+import trash.repository.models.DBMessage
 
-class DBQueries[F[_]: MonadCancelThrow](
-  xa: Transactor[F]
-) extends Queries[F](xa) {
+class DBQueries[F[_]: MonadCancelThrow](xa: Transactor[F]) {
 
   def getRandomMessage(chatId: Long): F[List[DBMessage]] =
     sql"""

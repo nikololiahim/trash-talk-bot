@@ -1,13 +1,13 @@
 import trash.repository.models.MsgType
-import trash.repository.models.Queries._
+import MsgType._
 
 class MsgTypeTests extends munit.FunSuite {
   val msgTypeTestCases: Map[MsgType, String] = Map(
-    MsgType.TEXT    -> "TEXT",
-    MsgType.VIDEO   -> "VIDEO",
-    MsgType.DOC     -> "DOC",
-    MsgType.STICKER -> "STICKER",
-    MsgType.IMAGE   -> "IMAGE",
+    TEXT    -> "TEXT",
+    VIDEO   -> "VIDEO",
+    DOC     -> "DOC",
+    STICKER -> "STICKER",
+    IMAGE   -> "IMAGE",
   )
 
   msgTypeTestCases.foreach { case (msgType, str) =>

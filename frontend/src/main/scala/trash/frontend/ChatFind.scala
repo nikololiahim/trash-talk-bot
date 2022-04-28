@@ -11,7 +11,6 @@ import trash.frontend.ConsoleAmogus.console2amogus
 
 import scala.util.{Failure, Success, Try}
 
-
 @react object ChatFind {
   Css.App
 

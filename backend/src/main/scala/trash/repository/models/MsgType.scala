@@ -1,6 +1,8 @@
 package trash.repository.models
 
 import scala.collection.immutable.SortedMap
+import doobie.postgres.implicits.pgEnumStringOpt
+import doobie.Meta
 
 sealed trait MsgType
 
@@ -24,5 +26,11 @@ object MsgType {
   )
 
   val msgTypes: List[MsgType] = mapping.values.toList
+
+  def toEnum(t: MsgType): String           = t.toString
+  def fromEnum(s: String): Option[MsgType] = MsgType.mapping.get(s)
+
+  implicit val msgTypeMeta: Meta[MsgType] =
+    pgEnumStringOpt("msg_type", fromEnum, toEnum)
 
 }

@@ -1,8 +1,9 @@
 package trash.utils.postgres
 
-import doobie._
+import doobie.{ConnectionIO, Fragment}
+import doobie.util.transactor.Transactor
+import cats.syntax.apply._
 import doobie.implicits._
-import cats.syntax.all._
 import trash.repository.models.MsgType
 
 object Schema {

@@ -14,21 +14,21 @@ import scala.scalajs.js.Object.create
 object App {
   private val css = Css.App
 
-  val App: FunctionalComponent[String] = FunctionalComponent[String] { botName =>
-    val (chatID, setChatID) = useState(0)
+  val App: FunctionalComponent[String] = FunctionalComponent[String] {
+    botName =>
+      val (chatID, setChatID) = useState(0)
 
-    def callBack(aboba: TelegramAuthData): Unit = {
-      console.log(aboba)
-    }
+      def callBack(aboba: TelegramAuthData): Unit =
+        console.log(aboba)
 
-    div(
-      className := "App",
       div(
-        className := "center",
-        ChatFind(setChatID),
-        MessageList.MessageList(MessageListProps(chatID)),
-      ),
-      div(TelegramLoginButton(botName=botName, dataOnauth = callBack))
-    )
+        className := "App",
+        div(
+          className := "center",
+          ChatFind(setChatID),
+          MessageList.MessageList(MessageListProps(chatID)),
+        ),
+        div(TelegramLoginButton(botName = botName, dataOnauth = callBack)),
+      )
   }
 }

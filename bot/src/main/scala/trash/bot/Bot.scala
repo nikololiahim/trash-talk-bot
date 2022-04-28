@@ -6,15 +6,14 @@ import com.bot4s.telegram.api.declarative.Commands
 import com.bot4s.telegram.cats.{Polling, TelegramBot}
 import com.bot4s.telegram.methods._
 import com.bot4s.telegram.models._
-import doobie.implicits._
 import sttp.client3.SttpBackend
 import trash.repository.models.MsgType
 
 class Bot[F[_]: Async](
-                        token: String,
-                        backend: SttpBackend[F, Any],
-                        queries: DBQueries[F],
-                        telegramApi: String = "api.telegram.org",
+  token: String,
+  backend: SttpBackend[F, Any],
+  queries: DBQueries[F],
+  telegramApi: String = "api.telegram.org",
 ) extends TelegramBot[F](token, backend, telegramApi)
   with Polling[F]
   with Commands[F] {
@@ -44,7 +43,7 @@ class Bot[F[_]: Async](
   override def receiveMessage(msg: Message): F[Unit] =
     (msg.newChatMembers, msg.leftChatMember) match {
       case (Some(_), None) =>
-            Async[F].delay(())
+        Async[F].delay(())
 //        botUser.flatMap { me =>
 //          if (addedUsers.contains(me)) {
 //            val req = SendMessage(msg.chat.chatId, f"Я ЩА ВСЁ ПРО ВАС УЗНАЮ")
