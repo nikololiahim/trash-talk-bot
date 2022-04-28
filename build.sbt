@@ -169,6 +169,7 @@ lazy val bot = crossProject(JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("bot"))
   .dependsOn(core, backend)
+  .aggregate(core, backend)
   .settings(Compiler.settings)
   .settings(
     name := "Trash Talk Telegram Bot",
