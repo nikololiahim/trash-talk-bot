@@ -2,7 +2,7 @@ package trash.core
 import cats.effect.IO
 
 object Settings {
-  val botEnvVarName = "TRASHTALK_TOKEN"
+  val botEnvVarName: String = "TRASHTALK_TOKEN"
   val botToken: IO[String] = IO.fromOption(sys.env.get(botEnvVarName))(
     new Exception(
       f"Telegram Bot API token is not set. " +
