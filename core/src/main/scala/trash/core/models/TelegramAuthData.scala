@@ -1,4 +1,5 @@
 package trash.core.models
+import io.circe.generic.semiauto._
 
 sealed case class TelegramAuthData(
   id: Int,
@@ -9,3 +10,8 @@ sealed case class TelegramAuthData(
   photo_url: String,
   username: String,
 )
+
+object TelegramAuthData{
+  implicit val encoder = deriveEncoder[TelegramAuthData]
+  implicit val decoder = deriveDecoder[TelegramAuthData]
+}

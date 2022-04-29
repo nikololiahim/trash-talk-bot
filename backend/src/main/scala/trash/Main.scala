@@ -3,13 +3,8 @@ package trash
 import cats.effect._
 import doobie.util.transactor.Transactor
 import org.http4s.blaze.server.BlazeServerBuilder
-import trash.core.Settings.backendPort
-import trash.core.Settings.backendURL
-import trash.core.Settings.dbName
-import trash.core.Settings.dbPassword
-import trash.core.Settings.dbURL
-import trash.core.Settings.dbUsername
-import trash.repository.Server
+import trash.core.Settings.{backendPort, backendURL, botToken, dbName, dbPassword, dbURL, dbUsername}
+import trash.repository.{Server, TelegramAPI}
 
 object Main extends IOApp {
 
@@ -25,9 +20,11 @@ object Main extends IOApp {
         pass = dbPassword,
       )
     )
+    botToken <- botToken
+    api = TelegramAPI.http4sAPI(tkn = botToken)
     _ <- BlazeServerBuilder[IO]
       .bindHttp(port = port, host)
-      .withHttpApp(new Server(transactor).app)
+      .withHttpApp(new Server(transactor, api).app)
       .resource
       .use(_ => IO.never)
   } yield code

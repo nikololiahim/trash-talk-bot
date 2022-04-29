@@ -1,5 +1,6 @@
 package trash.frontend
 
+import io.circe.syntax.EncoderOps
 import org.scalajs.dom
 import slinky.core.FunctionalComponent
 import slinky.core.facade.Hooks._
@@ -19,7 +20,7 @@ object App {
       val (chatID, setChatID) = useState(0)
 
       def callBack(aboba: TelegramAuthData): Unit =
-        console.log(aboba)
+        console.log(aboba.asJson.toString)
 
       div(
         className := "App",

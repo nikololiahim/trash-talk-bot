@@ -28,27 +28,3 @@ object Settings {
     )
 
 }
-
-//object Aux {
-//  case class Content(
-//    username: String
-//  )
-//  case class User(
-//    ok: Boolean,
-//    result: Content,
-//  )
-//
-//  def getBotName(token: String): IO[String] = {
-//    implicit val circeDecoder2  = deriveDecoder[Content]
-//    implicit val circeDecoder  = deriveDecoder[User]
-//    implicit val http4sDecoder = jsonOf[IO, User]
-//
-//    val req = GET(uri"https://api.telegram.org/bot${token}/getMe")
-//
-//    EmberClientBuilder.default[IO].build.use { client =>
-//      client
-//        .expect(req)(jsonOf[IO, User])
-//        .map(_.result.username)
-//    }
-//  }
-//}

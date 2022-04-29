@@ -15,7 +15,8 @@ object Dependencies {
   }
 
   val core = Seq(
-    "org.typelevel" %% "cats-effect" % V.cats
+    "io.circe"      %% "circe-generic"  % V.circe,
+    "org.typelevel" %% "cats-effect"    % V.cats
   )
 
   val test = Seq(
@@ -25,6 +26,8 @@ object Dependencies {
   val frontend = Def.setting(
     Seq(
       "org.scalameta" %%% "munit"       % V.munit % Test,
+      "io.circe"      %%% "circe-core"  % V.circe,
+      "io.circe"      %%% "circe-generic"  % V.circe,
       "me.shadaj"     %%% "slinky-core" % V.slinky,
       "me.shadaj"     %%% "slinky-web"  % V.slinky,
       "me.shadaj"     %%% "slinky-hot"  % V.slinky,
@@ -44,7 +47,7 @@ object Dependencies {
     "org.tpolecat" %% "doobie-hikari"       % V.doobie,
     "org.http4s"   %% "http4s-dsl"          % V.http4s,
     "org.http4s"   %% "http4s-blaze-server" % V.http4s,
+    "org.http4s"   %% "http4s-ember-client" % V.http4s,
     "org.http4s"   %% "http4s-circe"        % V.http4s,
-    "io.circe"     %% "circe-generic"       % V.circe,
   )
 }
